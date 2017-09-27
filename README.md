@@ -1,2 +1,3 @@
-# CSE519-2017-111578726
-CSE 519 work repository
+# CSE 519
+
+Work Repositary Fall 2017
