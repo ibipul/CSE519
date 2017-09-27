@@ -40,5 +40,11 @@ First step was to build a linear regression model with a subset of these variabl
 
 The second thing that I tried out was the KNN regssor model, on the same data set. While coding I ended up setting up both training and test variables on the same data set without noticing. However hearing that most of the people were getting lousy R^2 values I decided to re-eyeball my code and then I founf what has happened. Upon fixing that it was found that my model had an R^2 of -0.17. That is equivalent to saying my model does worse than a horizontal line. There was ine tunable parameter with this model, I tampered with it for a bit and realised if I kept increasing the parameter which determines the number of nearest neighbours the model considers before making the decision the r^2 slowly increased without much cheange in RMSE value. Last estimates were R^2 of -0.005 and an RMSE close to 0.03.
 
-The third model that I tried was a Random forest. The default implementation with the given data set yeilded a R^2 of
+The third model that I tried was a Random forest. The default implementation with the given data set yeilded a R^2 of -.0.15. I however progressively tuned it with by varying the number of estimators and tree depth going upto 4. Latest model has an R^2 of close to + 0.01, with comparable RMSE as other two previous models.
+
+# The Kaggle submission Experience
+This was the first time I have submitted anything on Kaggle and seeing myself on the leaderboard (although the tail end) was an interesting experience. Especially I I realised that I was not saving the normalizing metric for each columns from the trianing period. So I retrained my model to save those parameters. And re-generated my submission. I moved up by about 19 ranks. I would say I am hooked but, I had to finish a lot of assiciated tasks with this project so had to break off.
+
+## Learning
+I realise that I am not at all adept at tackling the data where it is very sparse or there are a lot of categorical variables. I need to pick up necessary skills related to that this semester. Also I need to work with Pandas more in order to be more at home with the scripting as I am generally with R.
 
