@@ -1,6 +1,6 @@
 # Project Report
 
-Following is an executive summary of the current HW2.
+Following is an executive summary of the current HW2. The final goal of the project was to give out error estimates of Zillows algorithm for 2.98 million property listings. There was complete information about a property and error margines in it's sale for about 90k listings-- these formed the data for model building and evaluation.
 
 ## About the Task
 
@@ -33,4 +33,12 @@ I personally leaned towards selecting:
 ## Handling the missing data
 Given my choice of variables and way I selected them the data cleaning strategy was very straight forward.
 - For Numeric quatities, I imputed the missing values by the median of the same quantiti observed in the collection. Then I have used the simple normalization of subtract mu and divide by Standard deviation.
-- For Categorical yet numeric quantities, I decided to denote the missing data as a category as no-information. So I imputed these areas with 0. Now most models would probably interpret numeric categorical labels as some sort of rating. Better option has a higher numeric rating. Which is not always true, and also given the information available to me especially from the data-dictionary -- it was not very clear. So I decided to take up one hot encoding. Essentially for a column with n levels, we add n-1 extra columns each with a binary switch defined on each levels of the original columns..
+- For Categorical yet numeric quantities, I decided to denote the missing data as a category as no-information. So I imputed these areas with 0. Now most models would probably interpret numeric categorical labels as some sort of rating. Better option has a higher numeric rating. Which is not always true, and also given the information available to me especially from the data-dictionary -- it was not very clear. So I decided to take up one hot encoding. Essentially for a column with n levels, we add n-1 extra columns each with a binary switch defined on each levels of the original columns.
+
+## Model building
+First step was to build a linear regression model with a subset of these variables. Although the RMSE value was quite low, but so was the R^2 metric that explains the variance of the model. First attempt was to improve that model with the larger variables set and with more data cleaning operations, but there was no significant change of model performance.
+
+The second thing that I tried out was the KNN regssor model, on the same data set. While coding I ended up setting up both training and test variables on the same data set without noticing. However hearing that most of the people were getting lousy R^2 values I decided to re-eyeball my code and then I founf what has happened. Upon fixing that it was found that my model had an R^2 of -0.17. That is equivalent to saying my model does worse than a horizontal line. There was ine tunable parameter with this model, I tampered with it for a bit and realised if I kept increasing the parameter which determines the number of nearest neighbours the model considers before making the decision the r^2 slowly increased without much cheange in RMSE value. Last estimates were R^2 of -0.005 and an RMSE close to 0.03.
+
+The third model that I tried was a Random forest. The default implementation with the given data set yeilded a R^2 of
+
