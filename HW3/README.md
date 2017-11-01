@@ -1,4 +1,4 @@
-####Homework 3
+######Homework 3
 
 This is the staging area of **Homework 3**
 
@@ -6,20 +6,19 @@ Contents
 -------------
 
 
-#### <i class="icon-file"></i> Homework-3-notebook.ipynb
- **Description**
+#### Homework-3-notebook.ipynb
  
  - This is the main **Homework 3 Notebook**
- -  Contains **6 tasks** as well as their analysis and figures
+ - Contains **6 tasks** as well as their analysis and figures
 
-#### <i class="icon-file"></i> Report Homework 3.pdf
+#### Report Homework 3.pdf
 
 This document is the executive summary of the entire homework3 project
 
-#### <i class="icon-folder-open"></i> Screenshots
+#### Screenshots
  
-> -  **FinalCapture.PNG** This shows the score of the submission
-> -  **Improvement-in-kaggle-score-AfterAddingExternal-dataset.PNG** Contains the comparison between HW3 submission and HW2 submission
+ -  **FinalCapture.PNG** This shows the score of the submission
+ -  **Improvement-in-kaggle-score-AfterAddingExternal-dataset.PNG** Contains the comparison between HW3 submission and HW2 submission
 
-#### <i class="icon-trash"></i> Scratch directory
+#### Scratch directory
 This directory contains all analysis work I had done in course of the Homework 3 tasks.
