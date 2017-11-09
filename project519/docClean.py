@@ -1,5 +1,6 @@
+import re
 from project519.docCls import doc_object
-
+from project519.strip_comments import strip_comments
 class content_preprocessor:
     def __init__(self, doc_object):
         self.doc_object = doc_object
@@ -10,7 +11,17 @@ class content_preprocessor:
         This function is used to remove all inline mathematical expressions from the file
         :return:
         """
-        return None
+        ##  \$([^\$]+)\$+
+        ## new_text = re.sub(rgx, '', new_text) # removes matches
+        p = re.compile(r'\$([^\$]+)\$+', re.I)
+        content_string_list = self.doc_object.sanitized_file_strings
+        math_exp_sanitized_string_list = []
+        for cont_str in content_string_list:
+            math_exp_sanitized_string = re.sub(p, '', cont_str)
+            math_exp_sanitized_string_list.append(math_exp_sanitized_string)
+
+        self.doc_object.sanitized_file_strings = math_exp_sanitized_string_list
+
 
     def remove_math_formula(self):
         """
@@ -18,7 +29,7 @@ class content_preprocessor:
         and those enclosed in \begin{equation}\end{equation}
         :return:
         """
-        return None
+        pass
 
     def clear_math(self):
         """
@@ -29,7 +40,24 @@ class content_preprocessor:
         self.remove_math_formula()
 
     def clear_comments(self):
-        pass
+        ##Use dzhuang/strip_comments.py for comment removal
+        ## encoding latin-1 /utf-8
+        content_string_list = self.doc_object.tex_file_contents
+        comment_removed_content_list = []
+        for cont_str in content_string_list:
+            comment_removed_content = strip_comments(cont_str)
+            comment_removed_content_list.append(comment_removed_content)
+
+        self.doc_object.sanitized_file_strings = comment_removed_content_list
+
+    def sanitize_whitespace(self):
+        content_string_list = self.doc_object.sanitized_file_strings
+        space_sanitized_string_list = []
+        for cont_str in content_string_list:
+            space_sanitized_string = re.sub('\s+',' ', cont_str)
+            space_sanitized_string_list.append(space_sanitized_string)
+
+        self.doc_object.sanitized_file_strings = space_sanitized_string_list
 
     def clear_latex_keys(self):
         pass
@@ -39,4 +67,7 @@ class content_preprocessor:
         # Add steps that complete preprocessing
         # Sequentially call above functions
         # Updates sanitized_file_strings of the doc_objects
+        self.clear_comments()
+        self.sanitize_whitespace()
+        self.clear_math()
         return self.doc_object
