@@ -9,7 +9,6 @@ class doc_object:
     1. tex file names are read into tex_filenames
     2. tex_file_contents contain raw tex file contents read in a string
     """
-
     def __init__(self, dir_path):
         """
         Constructor for doc_object class
@@ -19,9 +18,9 @@ class doc_object:
         self.tex_file_contents = self.read_files_as_string(filenames_list=self.tex_filenames)
 
         self.index_ground_truth = self.extract_index_words(content_strings=self.tex_file_contents)
-        self.sanitized_file_strings = [] # TODO:ibipul@cs.stonybrook.edu
-        self.compted_index_words = [] # TODO:ibipul@cs.stonybrook.edu
-        self.evaluation_performance = 0.0 # TODO:ibipul@cs.stonybrook.edu
+        self.sanitized_file_strings = [] # Updated by preprocessor
+        self.compted_index_words = [] # Updated by evaluation bed TODO ibipul
+        self.evaluation_performance = 0.0 # Updated by evaluation bed TODO ibipul
 
     def read_filenames(self, doc_directory):
         """
@@ -33,6 +32,12 @@ class doc_object:
         return tex_files
 
     def read_files_as_string(self, filenames_list):
+        """
+
+        :param filenames_list list[char]: list of component filenames
+        :return: list of contents of files as strings
+        :rtype list[char]:
+        """
         content_strings = []
         for file_name in filenames_list:
             with open(file_name, 'r') as content_file:
@@ -40,14 +45,12 @@ class doc_object:
                 content_strings.append(content)
         return content_strings
 
-
-
     def extract_index_words(self, content_strings):
         """
         Extracts and returns a list of index words encoded in the tex files
-        :return:
+        :return: a list of index words extracted
+        :rtype list[char]
         """
-        #p = re.compile(r'\$([^\$]+)\$+', re.I)
         p = re.compile(r'\\index\{([\w|\s]+)\}', re.I)
 
         index_word_list = []
@@ -55,7 +58,3 @@ class doc_object:
             list_from_a_string = p.findall(cont_str)
             index_word_list += list_from_a_string
         return index_word_list
-
-
-
-

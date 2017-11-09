@@ -3,16 +3,16 @@ from project519.docCls import doc_object
 from project519.strip_comments import strip_comments
 class content_preprocessor:
     def __init__(self, doc_object):
+        """
+         content_preprocessor constructor
+        :param doc_object doc_object:
+        """
         self.doc_object = doc_object
-
 
     def remove_math_exp(self):
         """
         This function is used to remove all inline mathematical expressions from the file
-        :return:
         """
-        ##  \$([^\$]+)\$+
-        ## new_text = re.sub(rgx, '', new_text) # removes matches
         p = re.compile(r'\$([^\$]+)\$+', re.I)
         content_string_list = self.doc_object.sanitized_file_strings
         math_exp_sanitized_string_list = []
@@ -21,7 +21,6 @@ class content_preprocessor:
             math_exp_sanitized_string_list.append(math_exp_sanitized_string)
 
         self.doc_object.sanitized_file_strings = math_exp_sanitized_string_list
-
 
     def remove_math_formula(self):
         """
@@ -40,8 +39,10 @@ class content_preprocessor:
         self.remove_math_formula()
 
     def clear_comments(self):
-        ##Use dzhuang/strip_comments.py for comment removal
-        ## encoding latin-1 /utf-8
+        """
+        Calls dzhuang/strip_comments.py for comment removal
+        Default encoding is now set to latin-1 other option is utf-8
+        """
         content_string_list = self.doc_object.tex_file_contents
         comment_removed_content_list = []
         for cont_str in content_string_list:
@@ -51,6 +52,9 @@ class content_preprocessor:
         self.doc_object.sanitized_file_strings = comment_removed_content_list
 
     def sanitize_whitespace(self):
+        """
+        Clears substansive extra formatting white spaces in the text
+        """
         content_string_list = self.doc_object.sanitized_file_strings
         space_sanitized_string_list = []
         for cont_str in content_string_list:
@@ -63,10 +67,14 @@ class content_preprocessor:
         pass
 
     def preprocess(self):
+        """
+        Invocation creates sanitized file strings of latex files for index computation
+        component functions are sequentially called
+        :return: doc_object with sanitized filestrings updated
+        :rtype doc_object:
+        """
         # TODO: ibipul@cs.stonybrook.edu
-        # Add steps that complete preprocessing
-        # Sequentially call above functions
-        # Updates sanitized_file_strings of the doc_objects
+
         self.clear_comments()
         self.sanitize_whitespace()
         self.clear_math()
