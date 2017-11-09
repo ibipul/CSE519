@@ -1,4 +1,5 @@
 import glob
+import re
 from collections import defaultdict
 
 class doc_object:
@@ -46,7 +47,14 @@ class doc_object:
         Extracts and returns a list of index words encoded in the tex files
         :return:
         """
-        return []
+        #p = re.compile(r'\$([^\$]+)\$+', re.I)
+        p = re.compile(r'\\index\{([\w|\s]+)\}', re.I)
+
+        index_word_list = []
+        for cont_str in content_strings:
+            list_from_a_string = p.findall(cont_str)
+            index_word_list += list_from_a_string
+        return index_word_list
 
 
 
