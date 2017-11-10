@@ -1,5 +1,6 @@
 import glob
 import re
+import io
 from collections import defaultdict
 
 class doc_object:
@@ -20,7 +21,7 @@ class doc_object:
         self.index_ground_truth = self.extract_index_words(content_strings=self.tex_file_contents)
         self.index_keywords = self.raw_keywords(ground_truth=self.index_ground_truth)
         self.sanitized_file_strings = [] # Updated by preprocessor
-        self.compted_index_words = [] # Updated by evaluation bed TODO ibipul
+        self.computed_index_words = [] # Updated by evaluation bed TODO ibipul
         self.evaluation_performance = 0.0 # Updated by evaluation bed TODO ibipul
 
     def read_filenames(self, doc_directory):
@@ -41,7 +42,7 @@ class doc_object:
         """
         content_strings = []
         for file_name in filenames_list:
-            with open(file_name, 'r') as content_file:
+            with io.open(file_name, encoding='latin-1') as content_file:
                 content = content_file.read()
                 content_strings.append(content)
         return content_strings
@@ -66,6 +67,9 @@ class doc_object:
                 w_splits = word.split("}\\index{")
                 sanitized_list += w_splits
             elif "\\begin" in word:
+                shortened_word = p1.findall(word)
+                sanitized_list += shortened_word
+            elif "\\end" in word:
                 shortened_word = p1.findall(word)
                 sanitized_list += shortened_word
             else:
