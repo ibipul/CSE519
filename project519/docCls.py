@@ -18,6 +18,7 @@ class doc_object:
         self.tex_file_contents = self.read_files_as_string(filenames_list=self.tex_filenames)
 
         self.index_ground_truth = self.extract_index_words(content_strings=self.tex_file_contents)
+        self.index_keywords = self.raw_keywords(ground_truth=self.index_ground_truth)
         self.sanitized_file_strings = [] # Updated by preprocessor
         self.compted_index_words = [] # Updated by evaluation bed TODO ibipul
         self.evaluation_performance = 0.0 # Updated by evaluation bed TODO ibipul
@@ -51,10 +52,39 @@ class doc_object:
         :return: a list of index words extracted
         :rtype list[char]
         """
-        p = re.compile(r'\\index\{([\w|\s]+)\}', re.I)
+        p = re.compile(r'index\{([\w|\s|\{|\}|\||\!|\-|\\|\']+)\}', re.I)
 
         index_word_list = []
         for cont_str in content_strings:
             list_from_a_string = p.findall(cont_str)
             index_word_list += list_from_a_string
-        return index_word_list
+
+        sanitized_list = []
+        p1 = re.compile(r'([\s|\w|\W]+)\}(?:[\s|\W|begin|end]+)\{[\s|\w|\W]+',re.I)
+        for word in index_word_list:
+            if "}\\index{" in word:
+                w_splits = word.split("}\\index{")
+                sanitized_list += w_splits
+            elif "\\begin" in word:
+                shortened_word = p1.findall(word)
+                sanitized_list += shortened_word
+            else:
+                sanitized_list.append(word)
+
+        return sanitized_list
+
+    def raw_keywords(self,ground_truth):
+        keyword_list = []
+        for word in ground_truth:
+            if '|' in word:
+                w_split = word.split('|')
+                if '!' in w_split[0]:
+                    tword = w_split[0].replace('!',' ')
+                keyword_list.append(tword)
+            elif '!' in word:
+                tword = word.replace('!', ' ')
+                keyword_list.append(tword)
+            else:
+                keyword_list.append(word)
+
+        return keyword_list
