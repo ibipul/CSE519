@@ -78,4 +78,5 @@ class content_preprocessor:
         self.clear_comments()
         self.sanitize_whitespace()
         self.clear_math()
+        self.doc_object.doc_string = ''.join(self.doc_object.sanitized_file_strings)
         return self.doc_object

@@ -1,8 +1,16 @@
 from project519.docCls import doc_object
 from project519.docClean import content_preprocessor
+from project519.evaluationBed import evaluation_bed
 TEST_PATH = 'C:\\Users\\ibipul\\codes\\datasets\\arxiv\\1111'
 tobj = doc_object(dir_path=TEST_PATH)
-c = content_preprocessor(tobj)
+# c = content_preprocessor(tobj)
+# x = c.preprocess()
+# y = x.sanitized_file_strings
+
+dlist = [tobj]
+eb = evaluation_bed(dlist)
+eb.plugin_algorithm('tfidf',0,1)
+
 
 # l = [... dirpath1, dirpath2,...]
 # x= []

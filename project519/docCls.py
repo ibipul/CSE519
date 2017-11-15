@@ -16,13 +16,20 @@ class doc_object:
         :param dir_path string: base folder of each directory containing the tex files
         """
         self.tex_filenames = self.read_filenames(doc_directory=dir_path)
+        ## File content related variables
         self.tex_file_contents = self.read_files_as_string(filenames_list=self.tex_filenames)
+        self.sanitized_file_strings = []  # Updated by preprocessor
+        self.doc_string = ''
 
+        # Index related Variables
         self.index_ground_truth = self.extract_index_words(content_strings=self.tex_file_contents)
         self.index_keywords = self.raw_keywords(ground_truth=self.index_ground_truth)
-        self.sanitized_file_strings = [] # Updated by preprocessor
         self.computed_index_words = [] # Updated by evaluation bed TODO ibipul
-        self.evaluation_performance = 0.0 # Updated by evaluation bed TODO ibipul
+
+        ## Evaluation Metrics
+        self.evaluation_performance_per_index = []
+        self.evaluation_index_to_candidates = 0.0
+        self.evaluation_candidates_to_index = 0.0
 
     def read_filenames(self, doc_directory):
         """
