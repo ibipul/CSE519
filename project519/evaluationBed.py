@@ -13,6 +13,9 @@ class evaluation_bed:
     def preprocessing(self):
         preprocessed_obj_list = []
         for obj in self.doc_objs:
+            if len(obj.index_keywords) == 0:
+                print("Directory: ", obj.dirname, " has a deeper hierarchy. Skipping")
+                continue
             doc_preprocessor = content_preprocessor(doc_object=obj)
             preprocessed_obj = doc_preprocessor.preprocess()
             preprocessed_obj_list.append(preprocessed_obj)
@@ -30,12 +33,14 @@ class evaluation_bed:
     def plugin_algorithm(self, algorithm_name='tfidf',lower = 0, upper = .99):
         if algorithm_name == 'tfidf':
             print(" Creating the TF.IDF model from sklearn")
+            print(" Using ", len(self.preprocessed_doc_objects)," documents, these are fine")
             tfidf_obj = tfidf_model(corpus=self.corpus, lower_threshold=lower, upper_threshold=upper)
             print(" Fitting the Corpus to the model")
             tfidf_obj.fit()
             self.model = tfidf_obj
             print("Running update on each doc based on TFIDF we have defined")
-            for doc in self.doc_objs:
+            for doc in self.preprocessed_doc_objects:
+                print("Executing for doc in: ", doc.dirname)
                 candidate_words_dict = tfidf_obj.get_dictionary_for_doc(doc.doc_string)
                 doc.candidate_words_dict = candidate_words_dict
                 self.per_object_evaluation(doc=doc)

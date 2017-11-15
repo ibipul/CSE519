@@ -44,7 +44,7 @@ class doc_object:
 
     def read_files_as_string(self, filenames_list):
         """
-
+        Reads Contents of tex files
         :param filenames_list list[char]: list of component filenames
         :return: list of contents of files as strings
         :rtype list[char]:
@@ -93,7 +93,9 @@ class doc_object:
                 w_split = word.split('|')
                 if '!' in w_split[0]:
                     tword = w_split[0].replace('!',' ')
-                keyword_list.append(tword)
+                    keyword_list.append(tword)
+                else:
+                    keyword_list.append(w_split[0])
             elif '!' in word:
                 tword = word.replace('!', ' ')
                 keyword_list.append(tword)
