@@ -15,7 +15,9 @@ class doc_object:
         Constructor for doc_object class
         :param dir_path string: base folder of each directory containing the tex files
         """
-        self.tex_filenames = self.read_filenames(doc_directory=dir_path)
+        self.dir_path = dir_path
+        self.dirname = self.dir_path.split('\\')[-2]
+        self.tex_filenames = self.read_filenames(doc_directory=self.dir_path)
         ## File content related variables
         self.tex_file_contents = self.read_files_as_string(filenames_list=self.tex_filenames)
         self.sanitized_file_strings = []  # Updated by preprocessor
@@ -37,7 +39,7 @@ class doc_object:
         :param doc_directory string:
         :return filenames list:
         """
-        tex_files = glob.glob(doc_directory + '\\*.tex')
+        tex_files = glob.glob(doc_directory + '*.tex')
         return tex_files
 
     def read_files_as_string(self, filenames_list):

@@ -1,9 +1,3 @@
-from string import punctuation
-from nltk.corpus import stopwords
-from nltk import word_tokenize
-from nltk import PorterStemmer
-import re
-
 from project519.docCls import doc_object
 from project519.docClean import content_preprocessor
 from project519.tfidfStrategy import tfidf_model
@@ -35,16 +29,17 @@ class evaluation_bed:
     # Define index computation algorithm
     def plugin_algorithm(self, algorithm_name='tfidf',lower = 0, upper = .99):
         if algorithm_name == 'tfidf':
+            print(" Creating the TF.IDF model from sklearn")
             tfidf_obj = tfidf_model(corpus=self.corpus, lower_threshold=lower, upper_threshold=upper)
-            tfidf_obj.fit(self.corpus)
+            print(" Fitting the Corpus to the model")
+            tfidf_obj.fit()
             self.model = tfidf_obj
+            print("Running update on each doc based on TFIDF we have defined")
             for doc in self.doc_objs:
                 candidate_words_dict = tfidf_obj.get_dictionary_for_doc(doc.doc_string)
                 doc.candidate_words_dict = candidate_words_dict
                 self.per_object_evaluation(doc=doc)
-                print(" Index Truth capture Ratio: ", doc.evaluation_performance_per_index)
-                print(" Overlap words/ True Index words:", doc.evaluation_index_to_candidates)
-                print(" Overlap words/ Candidate word set:", doc.evaluation_candidates_to_index)
+
         else:
             raise ValueError('That Algorithm is Not implemented yet')
 

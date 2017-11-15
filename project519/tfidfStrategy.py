@@ -41,8 +41,8 @@ class tfidf_model:
         tfidf_obj = TfidfVectorizer(stop_words=self.stop_words,tokenizer=self.tokenize,vocabulary=self.vocabulary)
         return tfidf_obj
 
-    def fit(self,corpus):
-        self.model.fit([doc_str for doc_str in corpus])
+    def fit(self):
+        self.model.fit([doc_str for doc_str in self.corpus])
 
     def get_dictionary_for_doc(self, document_string):
         X = self.model.transform([document_string])
