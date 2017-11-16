@@ -29,7 +29,7 @@ class doc_object:
         self.computed_index_words = [] # Updated by evaluation bed TODO ibipul
 
         ## Evaluation Metrics
-        self.evaluation_performance_per_index = []
+        self.evaluation_performance_per_index = 0.0
         self.evaluation_index_to_candidates = 0.0
         self.evaluation_candidates_to_index = 0.0
 
