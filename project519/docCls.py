@@ -18,17 +18,20 @@ class doc_object:
         self.dir_path = dir_path
         self.dirname = self.dir_path.split('\\')[-2]
         self.tex_filenames = self.read_filenames(doc_directory=self.dir_path)
+
         ## File content related variables
-        self.tex_file_contents = self.read_files_as_string(filenames_list=self.tex_filenames)
-        self.sanitized_file_strings = []  # Updated by preprocessor
-        self.doc_string = ''
+        self.tex_file_raw_contents = self.read_files_as_string(filenames_list=self.tex_filenames)
+        self.index_ground_truth, self.tex_file_contents = \
+            self.extract_index_words_and_content_strings(raw_content_strings=self.tex_file_raw_contents)
 
         # Index related Variables
-        self.index_ground_truth = self.extract_index_words(content_strings=self.tex_file_contents)
         self.index_keywords = self.raw_keywords(ground_truth=self.index_ground_truth)
-        self.computed_index_words = [] # Updated by evaluation bed TODO ibipul
-
+        self.index_keywords_toplevel = self.raw_main_keywords(ground_truth=self.index_ground_truth)
         ## Evaluation Metrics
+        self.sanitized_file_strings = []  # Updated by preprocessor.preprocess()
+        self.doc_string = '' #Updated by preprocessor.preprocess()
+        self.latex_black_list = []
+        self.computed_index_words = []  # Updated by evaluation bed TODO ibipul
         self.evaluation_performance_per_index = 0.0
         self.evaluation_index_to_candidates = 0.0
         self.evaluation_candidates_to_index = 0.0
@@ -56,35 +59,54 @@ class doc_object:
                 content_strings.append(content)
         return content_strings
 
-    def extract_index_words(self, content_strings):
+    def sanitize_and_extract_index(self, content_strings):
+        """
+        Given a docstring eliminates the index_terms from it,
+        and returns a list of index words
+        :param content_strings string:
+        :return:
+        :rtype:
+        string, list[str]
+        """
+        index_list = [m.start() for m in re.finditer('index', content_strings)]
+        index_terms = []
+        for word_start in index_list:
+            start_index = word_start - 1
+            if content_strings[start_index] == '\\' and content_strings[start_index + 6] == '{':
+                index = start_index + 7
+                bracket_count = 1
+                while bracket_count != 0:
+                    next_char = content_strings[index]
+                    if next_char == '{':
+                        bracket_count += 1
+                    elif next_char == '}':
+                        bracket_count -= 1
+
+                    index += 1
+                end_index = index
+                index_terms.append(content_strings[start_index:end_index])
+            else:
+                continue
+
+        for term in index_terms:
+            content_strings = content_strings.replace(term, '')
+
+        index_word_list = [t[7:-1] for t in index_terms]
+        return content_strings, index_word_list
+
+    def extract_index_words_and_content_strings(self, raw_content_strings):
         """
         Extracts and returns a list of index words encoded in the tex files
         :return: a list of index words extracted
-        :rtype list[char]
+        :rtype list[string], lis[string]
         """
-        p = re.compile(r'index\{([\w|\s|\{|\}|\||\!|\-|\\|\']+)\}', re.I)
-
-        index_word_list = []
-        for cont_str in content_strings:
-            list_from_a_string = p.findall(cont_str)
-            index_word_list += list_from_a_string
-
-        sanitized_list = []
-        p1 = re.compile(r'([\s|\w|\W]+)\}(?:[\s|\W|begin|end]+)\{[\s|\w|\W]+',re.I)
-        for word in index_word_list:
-            if "}\\index{" in word:
-                w_splits = word.split("}\\index{")
-                sanitized_list += w_splits
-            elif "\\begin" in word:
-                shortened_word = p1.findall(word)
-                sanitized_list += shortened_word
-            elif "\\end" in word:
-                shortened_word = p1.findall(word)
-                sanitized_list += shortened_word
-            else:
-                sanitized_list.append(word)
-
-        return sanitized_list
+        all_index_words = []
+        all_content_strings = []
+        for cont_str in raw_content_strings:
+            clean_str, indices = self.sanitize_and_extract_index(content_strings=cont_str)
+            all_content_strings.append(clean_str)
+            all_index_words += indices
+        return all_index_words, all_content_strings
 
     def raw_keywords(self,ground_truth):
         keyword_list = []
@@ -99,6 +121,24 @@ class doc_object:
             elif '!' in word:
                 tword = word.replace('!', ' ')
                 keyword_list.append(tword)
+            else:
+                keyword_list.append(word)
+
+        return keyword_list
+
+    def raw_main_keywords(self,ground_truth):
+        keyword_list = []
+        for word in ground_truth:
+            if '|' in word:
+                w_split = word.split('|')
+                if '!' in w_split[0]:
+                    tword = w_split[0].split('!')
+                    keyword_list.append(tword[0])
+                else:
+                    keyword_list.append(w_split[0])
+            elif '!' in word:
+                tword = word.split('!')
+                keyword_list.append(tword[0])
             else:
                 keyword_list.append(word)
 

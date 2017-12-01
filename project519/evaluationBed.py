@@ -2,13 +2,23 @@ from project519.docCls import doc_object
 from project519.docClean import content_preprocessor
 from project519.tfidfStrategy import tfidf_model
 
+#_LATEX_BLACK_LIST_PACKAGE_NAME = "C:\\Users\\ibipul\\codes\\CSE519-2017-111578726\\project519\\some_frequent_latex_packages.txt"
 class evaluation_bed:
     def __init__(self, doc_obj_list):
         self.doc_objs = doc_obj_list
+        #self.pkg_blacklist = self.read_latex_blacklist_pkg()
         self.preprocessed_doc_objects = self.preprocessing()
         self.corpus = self.get_corpus()
         self.model = None
 
+
+    # def read_latex_blacklist_pkg(self,file= _LATEX_BLACK_LIST_PACKAGE_NAME):
+    #     with open(file) as f:
+    #         blist = f.read().splitlines()
+    #     return blist
+
+    # def remove_blacklisted_package_ocurrence(self, cstr):
+    #     return ' '.join([i for i in cstr.split() if i not in self.pkg_blacklist])
 
     def preprocessing(self):
         preprocessed_obj_list = []
@@ -18,6 +28,7 @@ class evaluation_bed:
                 continue
             doc_preprocessor = content_preprocessor(doc_object=obj)
             preprocessed_obj = doc_preprocessor.preprocess()
+            print(preprocessed_obj.dirname)
             preprocessed_obj_list.append(preprocessed_obj)
 
         return preprocessed_obj_list
