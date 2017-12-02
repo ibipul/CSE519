@@ -2,7 +2,7 @@ import re
 from project519.docCls import doc_object
 from project519.strip_comments import strip_comments
 
-_LATEX_BLACK_LIST_FILE = "C:\\Users\\ibipul\\codes\\CSE519-2017-111578726\\project519\\latex_keywords.txt"
+# _LATEX_BLACK_LIST_FILE = "C:\\Users\\ibipul\\codes\\CSE519-2017-111578726\\project519\\latex_keywords.txt"
 class content_preprocessor:
     def __init__(self, doc_object):
         """
@@ -10,7 +10,7 @@ class content_preprocessor:
         :param doc_object doc_object:
         """
         self.doc_object = doc_object
-        self._latex_blist = self.read_latex_blacklist()
+        # self._latex_blist = self.read_latex_blacklist()
 
     def remove_math_exp(self):
         """
@@ -66,18 +66,15 @@ class content_preprocessor:
 
         self.doc_object.sanitized_file_strings = space_sanitized_string_list
 
-    def read_latex_blacklist(self,file= _LATEX_BLACK_LIST_FILE):
-        with open(file) as f:
-            blist = f.read().splitlines()
-        return blist
+    # def read_latex_blacklist(self,file= _LATEX_BLACK_LIST_FILE):
+    #     with open(file) as f:
+    #         blist = f.read().splitlines()
+    #     return blist
 
     def clear_latex_formatting(self):
         ## Remove bibliography
         p_bibliography = re.compile(r'(\\begin\{thebibliography\}[\s|\W|\w]+\\end\{thebibliography\})')
         self.doc_object.doc_string = re.sub(p_bibliography, '', self.doc_object.doc_string)
-        # ## Remove Preamble
-        # p_preamble = re.compile(r'([\w|\W|s]+\\begin\{document\})')
-        # self.doc_object.doc_string = re.sub(p_preamble, '', self.doc_object.doc_string)
         ## All begin{xyz} items
         p_begin= re.compile(r'(\\begin\{[a-z|*]+\})',re.I)
         self.doc_object.doc_string = re.sub(p_begin, '', self.doc_object.doc_string)
@@ -91,8 +88,8 @@ class content_preprocessor:
         p_citeref = re.compile(r'(\\[cite|ref]+\{[\w|\-|\:|\||0-9|]+\})')
         self.doc_object.doc_string = re.sub(p_citeref, '', self.doc_object.doc_string)
         # Remove all other latex keywords
-        for term in self._latex_blist:
-            self.doc_object.doc_string = self.doc_object.doc_string.replace(term.lower(),'')
+        # for term in self._latex_blist:
+        #     self.doc_object.doc_string = self.doc_object.doc_string.replace(term.lower(),' ')
 
     def remove_words_aretifacts_le_2(self):
         self.doc_object.doc_string = ' '.join(word for word in self.doc_object.doc_string.split() if len(word) > 3)
@@ -115,6 +112,7 @@ class content_preprocessor:
         self.doc_object.doc_string = ''.join(self.doc_object.sanitized_file_strings).lower()
         self.clear_latex_formatting()
         self.clear_punct_specialchar()
+        self.sanitize_whitespace()
         self.remove_words_aretifacts_le_2()
 
         return self.doc_object

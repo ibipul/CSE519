@@ -3,10 +3,11 @@ from project519.docClean import content_preprocessor
 from project519.tfidfStrategy import tfidf_model
 
 #_LATEX_BLACK_LIST_PACKAGE_NAME = "C:\\Users\\ibipul\\codes\\CSE519-2017-111578726\\project519\\some_frequent_latex_packages.txt"
+_LATEX_BLACK_LIST_FILE = "C:\\Users\\ibipul\\codes\\CSE519-2017-111578726\\project519\\latex_keywords.txt"
 class evaluation_bed:
     def __init__(self, doc_obj_list):
         self.doc_objs = doc_obj_list
-        #self.pkg_blacklist = self.read_latex_blacklist_pkg()
+        self.ltx_blacklist = self.read_latex_blacklist()
         self.preprocessed_doc_objects = self.preprocessing()
         self.corpus = self.get_corpus()
         self.model = None
@@ -19,6 +20,14 @@ class evaluation_bed:
 
     # def remove_blacklisted_package_ocurrence(self, cstr):
     #     return ' '.join([i for i in cstr.split() if i not in self.pkg_blacklist])
+    def read_latex_blacklist(self,file= _LATEX_BLACK_LIST_FILE):
+        with open(file) as f:
+            blist = f.read().splitlines()
+        return blist
+
+    def filter_latex_blacklist(self, words):
+        set_difference_doc_string = set(set(words)).difference(self.ltx_blacklist)
+        return ' '.join(list(set_difference_doc_string))  # setdiff of words & blacklist
 
     def preprocessing(self):
         preprocessed_obj_list = []
@@ -28,6 +37,8 @@ class evaluation_bed:
                 continue
             doc_preprocessor = content_preprocessor(doc_object=obj)
             preprocessed_obj = doc_preprocessor.preprocess()
+            preprocessed_obj.doc_string = \
+                self.filter_latex_blacklist(words=preprocessed_obj.doc_string.split())
             print(preprocessed_obj.dirname)
             preprocessed_obj_list.append(preprocessed_obj)
 
