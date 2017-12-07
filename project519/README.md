@@ -44,6 +44,9 @@ Following are the Algorithm objects
 ###### LDAStrategy.py
     This contains a topic modelling approach, that works per document.
 ###### word2vecStrategy
-    This contains the word embedding based clustering approach. Here first we generate the word embedding for all words in a document.
-    Then use this in each doc to cluster the words to find a list of topics, currently sklearn K-means, with n_cluster set at 20.
+    This contains the word embedding based clustering approach. 
+    Here first we generate the word embedding for all words in a document--
+    current implementation uses gensim word2vec for this purpose.
+    Then use this in each doc to cluster the words to find a list of topics, 
+    currently sklearn K-means, with n_cluster set at 20.
     Other clustering and distance metric could be tested out in future if needed.
