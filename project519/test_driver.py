@@ -18,7 +18,8 @@ def main():
             print(" Generating data set for {0} to {1}".format(_LOWER,_UPPER))
             file_name = "trial_{0}_{1}.csv".format(_LOWER, _UPPER)
             eval_environment.plugin_algorithm(algorithm_name='tfidf', lower=_LOWER, upper=_UPPER)
-
+            #eval_environment.plugin_algorithm(algorithm_name='lda', lower=_LOWER, upper=_UPPER)
+            #eval_environment.plugin_algorithm(algorithm_name='word2vec', lower=_LOWER, upper=_UPPER)
             line = 'dir_name,lower,upper,index_capture_ratio,overlap_to_true_index,overlap_to_subset'
             thefile = open(_FILE_LOCATION+file_name, 'w')
             thefile.write("%s\n" % line)
@@ -28,7 +29,7 @@ def main():
                     obj.dirname, round(obj.evaluation_performance_per_index, 3), round(obj.evaluation_index_to_candidates, 3),
                     round(obj.evaluation_candidates_to_index, 3)))
                 temp_line = \
-                    [obj.dirname,_LOWER,_UPPER, round(obj.evaluation_performance_per_index, 3),
+                    [obj.dirname,_LOWER,_UPPER, round(obj.weighted_intersection, 3),
                      round(obj.evaluation_index_to_candidates, 3),round(obj.evaluation_candidates_to_index, 3)]
                 thefile.write("%s\n" % ','.join(str(v) for v in temp_line))
 

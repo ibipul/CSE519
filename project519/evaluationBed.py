@@ -126,7 +126,7 @@ class evaluation_bed:
                       'ov_prec: %.3f' % doc.evaluation_candidates_to_index)
 
         elif algorithm_name=='word2vec':
-            print("Running Word Embedding algorithm now", gensim and sklearn.kmeans)
+            print("Running Word Embedding algorithm now with gensim and sklearn.kmeans")
             web_model_obj = w2v_model(corpus=self.corpus)
             self.model = web_model_obj
             for doc in self.preprocessed_doc_objects:

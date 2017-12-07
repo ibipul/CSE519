@@ -12,6 +12,12 @@ import re
 class tfidf_model:
 
     def __init__(self, corpus, lower_threshold, upper_threshold):
+        """
+        Constructor for initializing the tfidf model
+        :param corpus list[string]: flat list of doc_strings from all the component doc in corpus
+        :param lower_threshold:
+        :param upper_threshold:
+        """
         self._LOWER_THRESHOLD = lower_threshold
         self._UPPER_THRESHOLD = upper_threshold
         self.corpus = corpus
@@ -21,6 +27,12 @@ class tfidf_model:
         #self.candidate_word_dict ={}
 
     def filter_black_list(self,tok_list):
+        """
+        Makes sure we filter out most forms of parts of speech, remove non-nouns from the index word output
+        from our index words
+        :param tok_list list[string]: list of word tokens
+        :return:
+        """
         white_list_words = []
         remove_pos = ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ',
                       'WP', 'WDT', 'RB', 'MD', 'RBR', 'RBS', 'PRP', 'JJ', 'JJR', 'JJS', 'IN', 'DT', 'CD', 'CC']
