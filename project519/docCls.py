@@ -27,12 +27,17 @@ class doc_object:
         # Index related Variables
         self.index_keywords = self.raw_keywords(ground_truth=self.index_ground_truth)
         self.index_keywords_toplevel = self.raw_main_keywords(ground_truth=self.index_ground_truth)
+
+
         ## Evaluation Metrics
         self.sanitized_file_strings = []  # Updated by preprocessor.preprocess()
         self.doc_string = '' #Updated by preprocessor.preprocess()
         self.latex_black_list = []
         self.computed_index_words = []  # Updated by evaluation bed TODO ibipul
+        self.candidate_words_dict=None
+        self.candidate_words_list=[]
         self.evaluation_performance_per_index = 0.0
+        self.weighted_intersection= 0.0
         self.evaluation_index_to_candidates = 0.0
         self.evaluation_candidates_to_index = 0.0
 
@@ -109,6 +114,13 @@ class doc_object:
         return all_index_words, all_content_strings
 
     def raw_keywords(self,ground_truth):
+        """
+        Implements a variation of keywords, this method tries
+        to reconstruct full pharases of sub-index entries
+        :param ground_truth string: phrases in the index
+        :return:
+        :rtype: list[string]
+        """
         keyword_list = []
         for word in ground_truth:
             if '|' in word:
@@ -123,10 +135,15 @@ class doc_object:
                 keyword_list.append(tword)
             else:
                 keyword_list.append(word)
-
         return keyword_list
 
     def raw_main_keywords(self,ground_truth):
+        """
+        This extracts the top level index words with multiplicity.
+        :param ground_truth string:
+        :return:
+        :rtype: list[string]
+        """
         keyword_list = []
         for word in ground_truth:
             if '|' in word:
@@ -141,5 +158,4 @@ class doc_object:
                 keyword_list.append(tword[0])
             else:
                 keyword_list.append(word)
-
         return keyword_list
