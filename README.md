@@ -7,3 +7,12 @@ Contents of this directory:
 - Hw3 - Unsupervised approach of approaching the zillow problem in python notebooks
 - Project519 - Course project: Automated document index building
 #### Automated document index building
+- Here we have built a platform that explores the process of automated index building.
+- currently the system only suggests unigrams
+- We have explored 3, index generations schemes
+	- simple tfidf approach
+	- LDA approach
+	- word embedding approach
+- Evaluation metric presented in terms of 
+	- a weighed unigram overlap
+	- simple bag of words overlap approaches.
