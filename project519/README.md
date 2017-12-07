@@ -36,14 +36,14 @@ Component files are:
 This file is the main invokating point for any demo run.
 
 #### Algorithm objects
-Currently there are 3 algorithmic strategies implemented with the platform. 
+Evalusation bed acceps algorithm objects that work on the loaded copous in the environment.
 All the algorithm objects have identical invocation and evaluation interfaces that are invocable.
 Following are the Algorithm objects
-    - ##### tfidfStrategy.py
+###### tfidfStrategy.py
     This contains the implementation of a band threshold based idea that Luhn talked about in his 1958 paper.
-    - #### LDAStrategy.py
+###### LDAStrategy.py
     This contains a topic modelling approach, that works per document.
-    - #### word2vecStrategy
+###### word2vecStrategy
     This contains the word embedding based clustering approach. Here first we generate the word embedding for all words in a document.
     Then use this in each doc to cluster the words to find a list of topics, currently sklearn K-means, with n_cluster set at 20.
     Other clustering and distance metric could be tested out in future if needed.
